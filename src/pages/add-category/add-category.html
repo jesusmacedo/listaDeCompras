@@ -1,0 +1,23 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Add Category</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list>
+        <ion-list-header>
+            Enter the name of the new category
+        </ion-list-header>
+        <form [formGroup]="createForm" (submit)="didPressCreate()">
+            <ion-item>
+                <ion-label floating>Name</ion-label>
+                <ion-input type="text" formControlName="categoryName"></ion-input>
+            </ion-item>
+        </form>
+    </ion-list>
+
+    <div padding>
+        <button ion-button color="danger" block [disabled]="!createForm.valid" (click)="didPressButton()">{{buttonLabel}}</button>
+    </div>
+</ion-content>

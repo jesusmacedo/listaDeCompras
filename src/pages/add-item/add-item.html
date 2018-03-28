@@ -1,0 +1,44 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>New Item</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list>
+        <ion-list-header>
+            Add new item
+        </ion-list-header>
+
+        <form [formGroup]="createForm">
+            <ion-item>
+                <ion-label floating>Name</ion-label>
+                <ion-input type="text" formControlName="itemName"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>Category</ion-label>
+                <ion-select formControlName="itemCategory">
+                    <ion-option value="nes">NES</ion-option>
+                    <ion-option value="n64">Nintendo64</ion-option>
+                    <ion-option value="ps">PlayStation</ion-option>
+                    <ion-option value="genesis">Sega Genesis</ion-option>
+                    <ion-option value="saturn">Sega Saturn</ion-option>
+                    <ion-option value="snes">SNES</ion-option>
+                </ion-select>
+            </ion-item>
+
+            <ion-item>
+                <ion-label floating>Price</ion-label>
+                <ion-input type="number" formControlName="itemPrice"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label floating>Number of items</ion-label>
+                <ion-input type="number" formControlName="numberOfItems"></ion-input>
+            </ion-item>
+        </form>
+    </ion-list>
+
+    <div padding>
+        <button ion-button color="danger" block [disabled]="!createForm.valid" (click)="didPressSave()">Save</button>
+    </div>
+</ion-content>

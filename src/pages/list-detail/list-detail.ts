@@ -47,10 +47,10 @@ export class ListDetailPage {
     // User Interaction
 
     /**
-     * Create and display the `AddItemPage` modal in order to create a new `ProductM`.
+     * Create and display the `AddItemToListPage` modal in order to create a new `ProductM`.
      */
     didPressAddItem(): void {
-        let modal = this.modalCtrl.create('AddItemPage');
+        let modal = this.modalCtrl.create('AddItemToListPage');
 
         // onWillDismiss over onDidDismiss due to better UX
         modal.onWillDismiss((data: any) => {

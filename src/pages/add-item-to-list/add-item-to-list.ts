@@ -5,7 +5,6 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 
 import { ProductM } from '../../models/product.model';
 import { ProductCategoryM } from '../../models/product-category.model';
-import { ListM } from '../../models/list.model';
 
 @IonicPage()
 @Component({
@@ -63,5 +62,12 @@ export class AddItemToListPage implements OnInit {
 
         // send back the item
         this.viewCtrl.dismiss({ item: product, category: category });
+    }
+
+    /**
+     * Dismiss this modal.
+     */
+    didPressClose(): void {
+        this.viewCtrl.dismiss();
     }
 }

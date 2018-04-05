@@ -12,6 +12,8 @@ import { ListM } from '../../models/list.model';
     templateUrl: 'add-item.html'
 })
 export class AddItemPage implements OnInit {
+    // categories
+    categories: Array<ProductCategoryM> = [];
     // Forms
     createForm: FormGroup;
     //
@@ -30,8 +32,8 @@ export class AddItemPage implements OnInit {
      * Load the previously stored lists when this page is loaded.
      */
     ionViewDidLoad() {
-        this.storage.get('categories').then((categories: Array<ProductCategoryM>) => {
-            console.info('categories?', categories);
+        this.storage.get('categories').then((categories: ProductCategoryM[]) => {
+            this.categories = categories;
         });
     }
 
@@ -42,9 +44,9 @@ export class AddItemPage implements OnInit {
      */
     ngOnInit() {
         this.createForm = this.formBuilder.group({
-            itemName: new FormControl('', Validators.compose([Validators.required])),
-            itemCategory: new FormControl('', Validators.compose([Validators.required])),
-            itemPrice: new FormControl('', Validators.compose([Validators.required])),
+            name: new FormControl('', Validators.compose([Validators.required])),
+            category: new FormControl('', Validators.compose([Validators.required])),
+            price: new FormControl('', Validators.compose([Validators.required])),
             numberOfItems: new FormControl('', Validators.compose([Validators.required]))
         });
     }
@@ -52,14 +54,15 @@ export class AddItemPage implements OnInit {
     // User Interaction
 
     didPressSave(): void {
-        let name: string = this.createForm.controls['itemName'].value;
-        let category: ProductCategoryM = this.createForm.controls['itemName'].value as ProductCategoryM;
-        let price: number = this.createForm.controls['itemName'].value;
-        let numberOfItems: number = this.createForm.controls['itemName'].value;
+        let name: string = this.createForm.controls['name'].value;
+        let index: number = parseInt(this.createForm.controls['category'].value, 10);
+        let category: ProductCategoryM = this.categories[index];
+        let price: number = this.createForm.controls['price'].value;
+        let numberOfItems: number = this.createForm.controls['numberOfItems'].value;
 
-        let product: ProductM = new ProductM(name, category, price, numberOfItems);
+        let product: ProductM = new ProductM(name, price, numberOfItems);
 
         // send back the item
-        this.viewCtrl.dismiss({ item: product });
+        this.viewCtrl.dismiss({ item: product, category: category });
     }
 }

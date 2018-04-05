@@ -6,10 +6,10 @@ export class ProductM {
     price: number = 0.0;
     numberOfItems: number = 1;
 
-    constructor(name: string, category: ProductCategoryM, price: number, numberOfItems: number) {
+    constructor(name: string, price: number, numberOfItems: number, category?: ProductCategoryM) {
         this.name = name;
-        this.category = category;
         this.price = price;
         this.numberOfItems = numberOfItems;
+        this.category = category;
     }
 }

@@ -4,20 +4,31 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-    <ion-list>
-        <ion-list-header>
-            Enter the name of the new list
-        </ion-list-header>
-        <form [formGroup]="createForm" (submit)="didPressCreate()">
-            <ion-item>
-                <ion-label floating>Name</ion-label>
-                <ion-input type="text" formControlName="listName"></ion-input>
-            </ion-item>
-        </form>
-    </ion-list>
+<ion-content>
+    <ion-card>
+        <ion-card-header color="primary">
+            Create a new list
+        </ion-card-header>
+        <ion-list no-lines>
+            <form [formGroup]="createForm" (submit)="didPressCreate()">
+                <ion-item>
+                    <ion-label floating>Name</ion-label>
+                    <ion-input type="text" formControlName="listName"></ion-input>
+                </ion-item>
+                <button ion-button color="dark" block [disabled]="!createForm.valid">Create</button>
+            </form>
+        </ion-list>
+    </ion-card>
 
-    <div padding>
-        <button ion-button color="danger" block [disabled]="!createForm.valid" (click)="didPressCreate()">Create</button>
-    </div>
+    <ion-card *ngIf="unfinished.length > 0">
+        <ion-card-header color="danger">
+            Unfinished lists
+        </ion-card-header>
+        <ion-list>
+            <button ion-item *ngFor="let un of unfinished" (click)="didPressList(un)">
+                <h2>{{un.name}}</h2>
+                <p item-end>{{un.total | currency:'MXN'}}</p>
+            </button>
+        </ion-list>
+    </ion-card>
 </ion-content>

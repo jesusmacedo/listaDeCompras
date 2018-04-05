@@ -13,23 +13,18 @@
         <form [formGroup]="createForm">
             <ion-item>
                 <ion-label floating>Name</ion-label>
-                <ion-input type="text" formControlName="itemName"></ion-input>
+                <ion-input type="text" formControlName="name"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label>Category</ion-label>
-                <ion-select formControlName="itemCategory">
-                    <ion-option value="nes">NES</ion-option>
-                    <ion-option value="n64">Nintendo64</ion-option>
-                    <ion-option value="ps">PlayStation</ion-option>
-                    <ion-option value="genesis">Sega Genesis</ion-option>
-                    <ion-option value="saturn">Sega Saturn</ion-option>
-                    <ion-option value="snes">SNES</ion-option>
+                <ion-select formControlName="category">
+                    <ion-option *ngFor="let category of categories; let i = index" value="{{i}}">{{category.name}}</ion-option>
                 </ion-select>
             </ion-item>
 
             <ion-item>
                 <ion-label floating>Price</ion-label>
-                <ion-input type="number" formControlName="itemPrice"></ion-input>
+                <ion-input type="number" formControlName="price"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label floating>Number of items</ion-label>
@@ -39,6 +34,6 @@
     </ion-list>
 
     <div padding>
-        <button ion-button color="danger" block [disabled]="!createForm.valid" (click)="didPressSave()">Save</button>
+        <button ion-button color="dark" block [disabled]="!createForm.valid" (click)="didPressSave()">Save</button>
     </div>
 </ion-content>

@@ -52,4 +52,8 @@ export class AddCategoryPage implements OnInit {
 
         this.viewCtrl.dismiss({ name, old: this.category });
     }
+
+    didPressClose(): void {
+        this.viewCtrl.dismiss();
+    }
 }

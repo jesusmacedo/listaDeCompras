@@ -31,6 +31,9 @@ export class CategoriesPage {
 
     // User Interaction
 
+    /**
+     * Create and display a `AddCategoryPage` modal in order to create a new Category.
+     */
     didPressAddCategory(): void {
         let modal = this.modalCtrl.create(AddCategoryPage);
 
@@ -48,22 +51,22 @@ export class CategoriesPage {
         modal.present();
     }
 
-    categorySelected(category: ProductCategoryM): void {
-        console.info(category);
+    /**
+     * Take the selected category to the edit/create modal in order to modify it.
+     * @param category to be edited.
+     */
+    didSelectCategory(category: ProductCategoryM): void {
         let modal = this.modalCtrl.create(AddCategoryPage, { category: category });
 
         // onWillDismiss over onDidDismiss due to better UX
         modal.onWillDismiss((data: any) => {
             if (data !== undefined) {
-                console.info('name', data.old);
                 let index: number = this.categories.findIndex(c => c == data.old);
-                console.info('index', index);
-                if (index > -1) {
-                    this.categories.splice(index, 1);
-                }
 
-                /*this.categories.unshift({ id: id, name: data.name });
-                this.storage.set('categories', this.categories);*/
+                if (index > -1) {
+                    this.categories[index].name = data.name;
+                    this.storage.set('categories', this.categories);
+                }
             }
         });
 

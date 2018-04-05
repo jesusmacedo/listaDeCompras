@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ViewController, NavParams } from 'ionic-angular';
+import { IonicPage, ViewController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
@@ -7,17 +7,16 @@ import { ProductM } from '../../models/product.model';
 import { ProductCategoryM } from '../../models/product-category.model';
 import { ListM } from '../../models/list.model';
 
+@IonicPage()
 @Component({
-    selector: 'page-add-item',
-    templateUrl: 'add-item.html'
+    selector: 'page-add-item-to-list',
+    templateUrl: 'add-item-to-list.html'
 })
-export class AddItemPage implements OnInit {
+export class AddItemToListPage implements OnInit {
     // categories
     categories: Array<ProductCategoryM> = [];
     // Forms
     createForm: FormGroup;
-    //
-    gaming: string;
 
     constructor(
         public viewCtrl: ViewController,

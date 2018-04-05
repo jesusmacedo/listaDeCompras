@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { EditListPage } from '../list/list';
 import { ListM } from '../../models/list.model';
 
+@IonicPage()
 @Component({
-    selector: 'page-new',
-    templateUrl: 'new.html'
+    selector: 'page-admin-lists',
+    templateUrl: 'admin-lists.html'
 })
-export class NewListPage implements OnInit {
+export class AdminListsPage {
     // lists
     lists: Array<ListM> = [];
     unfinished: Array<ListM> = [];
@@ -63,7 +63,7 @@ export class NewListPage implements OnInit {
 
         this.lists.unshift(newList);
         this.storage.set('lists', this.lists).then(() => {
-            this.navCtrl.push(EditListPage, { list: newList });
+            this.navCtrl.push('ListDetailPage', { list: newList });
         });
     }
 
@@ -72,6 +72,6 @@ export class NewListPage implements OnInit {
      * @param list.
      */
     didPressList(list: ListM): void {
-        this.navCtrl.push(EditListPage, { list: list, allLists: this.lists });
+        this.navCtrl.push('ListDetailPage', { list: list, allLists: this.lists });
     }
 }

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ViewController, NavParams } from 'ionic-angular';
+import { IonicPage, ViewController, NavParams } from 'ionic-angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { ProductCategoryM } from '../../models/product-category.model';
 
+@IonicPage()
 @Component({
     selector: 'page-add-category',
     templateUrl: 'add-category.html'
@@ -33,6 +34,9 @@ export class AddCategoryPage implements OnInit {
 
     // Ionic Lifecycle
 
+    /**
+     * Receive params from previous view.
+     */
     ionViewWillEnter() {
         this.category = this.navParams.get('category') as ProductCategoryM;
 
@@ -53,6 +57,9 @@ export class AddCategoryPage implements OnInit {
         this.viewCtrl.dismiss({ name, old: this.category });
     }
 
+    /**
+     * Dismiss this modal.
+     */
     didPressClose(): void {
         this.viewCtrl.dismiss();
     }

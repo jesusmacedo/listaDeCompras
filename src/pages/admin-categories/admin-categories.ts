@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { AddCategoryPage } from '../add-category/add-category';
 import { ProductCategoryM } from '../../models/product-category.model';
 
+@IonicPage()
 @Component({
-    selector: 'page-categories',
-    templateUrl: 'categories.html'
+    selector: 'page-admin-categories',
+    templateUrl: 'admin-categories.html'
 })
-export class CategoriesPage {
+export class AdminCategoriesPage {
     // categories
     categories: Array<ProductCategoryM> = [];
 
@@ -35,7 +35,7 @@ export class CategoriesPage {
      * Create and display a `AddCategoryPage` modal in order to create a new Category.
      */
     didPressAddCategory(): void {
-        let modal = this.modalCtrl.create(AddCategoryPage);
+        let modal = this.modalCtrl.create('AddCategoryPage');
 
         // onWillDismiss over onDidDismiss due to better UX
         modal.onWillDismiss((data: any) => {
@@ -56,7 +56,7 @@ export class CategoriesPage {
      * @param category to be edited.
      */
     didSelectCategory(category: ProductCategoryM): void {
-        let modal = this.modalCtrl.create(AddCategoryPage, { category: category });
+        let modal = this.modalCtrl.create('AddCategoryPage', { category: category });
 
         // onWillDismiss over onDidDismiss due to better UX
         modal.onWillDismiss((data: any) => {

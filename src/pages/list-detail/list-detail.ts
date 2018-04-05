@@ -1,23 +1,23 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { AddItemPage } from '../add-item/add-item';
 import { ProductM } from '../../models/product.model';
 import { ListM } from '../../models/list.model';
 import { ProductCategoryM } from '../../models/product-category.model';
 
+@IonicPage()
 @Component({
-    selector: 'page-list',
-    templateUrl: 'list.html'
+    selector: 'page-list-detail',
+    templateUrl: 'list-detail.html'
 })
-export class EditListPage {
+export class ListDetailPage {
     // Params
     list: ListM;
     allLists: Array<ListM> = [];
     // title
     title: string;
-    //
+    // items handling
     itemsByCategory: Array<{ category: string; items: ProductM[]; total: number }> = [];
     itemCategory: string;
 
@@ -50,7 +50,7 @@ export class EditListPage {
      * Create and display the `AddItemPage` modal in order to create a new `ProductM`.
      */
     didPressAddItem(): void {
-        let modal = this.modalCtrl.create(AddItemPage);
+        let modal = this.modalCtrl.create('AddItemPage');
 
         // onWillDismiss over onDidDismiss due to better UX
         modal.onWillDismiss((data: any) => {

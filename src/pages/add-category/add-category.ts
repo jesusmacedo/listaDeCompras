@@ -14,8 +14,10 @@ export class AddCategoryPage implements OnInit {
     createForm: FormGroup;
     // Params
     category: ProductCategoryM;
-    // button
-    buttonLabel: string = 'Create';
+    // state params
+    title: string = 'Create';
+    header: string = 'Enter the name of the new category';
+    button: string = 'Create';
     // is edition?
     isEdit: boolean = false;
 
@@ -42,7 +44,9 @@ export class AddCategoryPage implements OnInit {
 
         if (this.category !== undefined) {
             this.createForm.controls['categoryName'].setValue(this.category.name);
-            this.buttonLabel = 'Edit';
+            this.title = 'Editing';
+            this.header = 'Edit the name of the category';
+            this.button = 'Save';
         }
     }
 

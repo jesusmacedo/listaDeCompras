@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { MyApp } from './app.component';
+import { Lists } from '../singletons/lists';
 
 @NgModule({
     declarations: [MyApp],
@@ -19,6 +20,6 @@ import { MyApp } from './app.component';
     ],
     bootstrap: [IonicApp],
     entryComponents: [MyApp],
-    providers: [StatusBar, SplashScreen, { provide: ErrorHandler, useClass: IonicErrorHandler }]
+    providers: [StatusBar, SplashScreen, { provide: ErrorHandler, useClass: IonicErrorHandler }, Lists]
 })
 export class AppModule {}

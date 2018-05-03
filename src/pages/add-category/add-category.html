@@ -5,14 +5,14 @@
                 <ion-icon name="close-circle"></ion-icon>
             </button>
         </ion-buttons>
-        <ion-title>Add Category</ion-title>
+        <ion-title>{{title}} Category</ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
     <ion-list>
         <ion-list-header>
-            Enter the name of the new category
+            {{header}}
         </ion-list-header>
         <form [formGroup]="createForm" (submit)="didPressButton()">
             <ion-item>
@@ -23,6 +23,6 @@
     </ion-list>
 
     <div padding>
-        <button ion-button color="dark" block [disabled]="!createForm.valid" (click)="didPressButton()">{{buttonLabel}}</button>
+        <button ion-button color="dark" block [disabled]="!createForm.valid" (click)="didPressButton()">{{button}}</button>
     </div>
 </ion-content>

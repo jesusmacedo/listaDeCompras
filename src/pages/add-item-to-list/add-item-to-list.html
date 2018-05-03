@@ -5,14 +5,14 @@
                 <ion-icon name="close-circle"></ion-icon>
             </button>
         </ion-buttons>
-        <ion-title>New Item</ion-title>
+        <ion-title>{{title}} Item</ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
     <ion-list>
         <ion-list-header>
-            Add new item
+            {{header}}
         </ion-list-header>
 
         <form [formGroup]="createForm">

@@ -5,6 +5,7 @@ import { Storage } from '@ionic/storage';
 import { ProductM } from '../../models/product.model';
 import { ListM } from '../../models/list.model';
 import { ProductCategoryM } from '../../models/product-category.model';
+import { Lists } from '../../singletons/lists';
 
 @IonicPage()
 @Component({
@@ -12,34 +13,36 @@ import { ProductCategoryM } from '../../models/product-category.model';
     templateUrl: 'list-detail.html'
 })
 export class ListDetailPage {
-    // Params
+    // params
     list: ListM;
-    allLists: Array<ListM> = [];
     // title
     title: string;
-    // items handling
+    // items sorting
     itemsByCategory: Array<{ category: string; items: ProductM[]; total: number }> = [];
     itemCategory: string;
 
     constructor(
         public navCtrl: NavController,
         public navParams: NavParams,
+        public lists: Lists,
         private storage: Storage,
         private modalCtrl: ModalController
     ) {}
+
+    // Ionic Lifecycle
 
     /**
      * Receive params from previous view.
      */
     ionViewWillEnter() {
-        this.allLists = this.navParams.get('allLists') as Array<ListM>;
         this.list = this.navParams.get('list') as ListM;
         this.title = this.list.name;
 
         if (this.list.products.length > 0) {
-            console.info('products in list', this.list.products);
+            console.info('products/:', this.list.products);
             this.groupProductsByCategory();
         } else {
+            console.info('no products in list');
             this.list.products = [];
         }
     }
@@ -47,10 +50,34 @@ export class ListDetailPage {
     // User Interaction
 
     /**
-     * Create and display the `AddItemToListPage` modal in order to create a new `ProductM`.
+     * Create and display the `AddItemToListPage` modal in order to create a new `ProductM` and update the `ListM`.
      */
     didPressAddItem(): void {
-        let modal = this.modalCtrl.create('AddItemToListPage');
+        let id: number = 1 + this.list.products.length;
+        let modal = this.modalCtrl.create('AddItemToListPage', { id: id });
+
+        // onWillDismiss over onDidDismiss due to better UX
+        modal.onWillDismiss((data: any) => {
+            if (data !== undefined) {
+                let item: ProductM = data.item as ProductM;
+
+                this.list.products.unshift(item);
+                this.groupProductsByCategory().then(() => {
+                    this.lists.updateList(this.list);
+                });
+            }
+        });
+
+        modal.present();
+    }
+
+    /**
+     * Send the selected item to be updated.
+     * @param item to be updated.
+     * @param index of the item.
+     */
+    didPressItem(item: ProductM, index: number): void {
+        let modal = this.modalCtrl.create('AddItemToListPage', { item: item });
 
         // onWillDismiss over onDidDismiss due to better UX
         modal.onWillDismiss((data: any) => {
@@ -58,10 +85,10 @@ export class ListDetailPage {
                 let item: ProductM = data.item as ProductM;
                 let category: ProductCategoryM = data.category as ProductCategoryM;
                 item.category = category;
-                this.list.products.unshift(item);
-                console.warn('all', this.list.products);
+
+                this.list.products[index] = item;
                 this.groupProductsByCategory().then(() => {
-                    this.saveList();
+                    this.lists.updateList(this.list);
                 });
             }
         });
@@ -123,20 +150,5 @@ export class ListDetailPage {
         return new Promise(resolve => {
             resolve(true);
         });
-    }
-
-    /**
-     * Save the list after creating a new item.
-     */
-    private saveList(): void {
-        for (let i: number = 0; i < this.allLists.length; i++) {
-            console.info('comparing', i);
-            if ((this.list.id = this.allLists[i].id)) {
-                this.allLists[i] = this.list;
-                break;
-            }
-        }
-
-        this.storage.set('lists', this.allLists);
     }
 }

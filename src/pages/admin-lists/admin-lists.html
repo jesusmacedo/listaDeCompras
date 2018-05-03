@@ -20,12 +20,12 @@
         </ion-list>
     </ion-card>
 
-    <ion-card *ngIf="unfinished.length > 0">
+    <ion-card *ngIf="lists.unpaid.length > 0">
         <ion-card-header color="danger">
             Unfinished lists
         </ion-card-header>
         <ion-list>
-            <button ion-item *ngFor="let un of unfinished" (click)="didPressList(un)">
+            <button ion-item *ngFor="let un of lists.unpaid" (click)="didPressList(un)">
                 <h2>{{un.name}}</h2>
                 <p item-end>{{un.total | currency:'MXN'}}</p>
             </button>

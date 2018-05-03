@@ -12,10 +12,16 @@ import { ProductCategoryM } from '../../models/product-category.model';
     templateUrl: 'add-item-to-list.html'
 })
 export class AddItemToListPage implements OnInit {
-    // categories
-    categories: Array<ProductCategoryM> = [];
     // Forms
     createForm: FormGroup;
+    // categories
+    categories: Array<ProductCategoryM> = [];
+    // params
+    id: number = 0;
+    item: ProductM;
+    // state params
+    title: string = 'Create';
+    header: string = 'Add new item';
 
     constructor(
         public viewCtrl: ViewController,
@@ -35,6 +41,25 @@ export class AddItemToListPage implements OnInit {
         });
     }
 
+    // Ionic Lifecycle
+
+    /**
+     * Receive params from previous view.
+     */
+    ionViewWillEnter() {
+        this.id = this.navParams.get('id');
+        this.item = this.navParams.get('item') as ProductM;
+
+        if (this.item !== undefined) {
+            this.createForm.controls['name'].setValue(this.item.name);
+            this.createForm.controls['category'].setValue(this.item.category.id);
+            this.createForm.controls['price'].setValue(this.item.price);
+            this.createForm.controls['numberOfItems'].setValue(this.item.numberOfItems);
+            this.title = 'Editing';
+            this.header = 'Edit the item';
+        }
+    }
+
     // Angular Lifecycle
 
     /**
@@ -51,14 +76,18 @@ export class AddItemToListPage implements OnInit {
 
     // User Interaction
 
+    /**
+     * Create a new `ProductM` and return it to the caller page.
+     */
     didPressSave(): void {
+        let id: number = this.id !== undefined ? this.id : this.item.id;
         let name: string = this.createForm.controls['name'].value;
-        let index: number = parseInt(this.createForm.controls['category'].value, 10);
+        let index: number = this.createForm.controls['category'].value;
         let category: ProductCategoryM = this.categories[index];
         let price: number = this.createForm.controls['price'].value;
         let numberOfItems: number = this.createForm.controls['numberOfItems'].value;
 
-        let product: ProductM = new ProductM(name, price, numberOfItems);
+        let product: ProductM = new ProductM(id, name, price, numberOfItems, category);
 
         // send back the item
         this.viewCtrl.dismiss({ item: product, category: category });

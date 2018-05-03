@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, Loading } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { ListM } from '../../models/list.model';
+import { Lists } from '../../singletons/lists';
 
 @IonicPage()
 @Component({
@@ -11,35 +12,20 @@ import { ListM } from '../../models/list.model';
     templateUrl: 'admin-lists.html'
 })
 export class AdminListsPage {
-    // lists
-    lists: Array<ListM> = [];
-    unfinished: Array<ListM> = [];
+    // displayed while loading the lists
+    loader: Loading;
     // Forms
     createForm: FormGroup;
     // lists
     previousLists: Array<ListM> = [];
 
-    constructor(public navCtrl: NavController, private storage: Storage, private formBuilder: FormBuilder) {}
-
-    // Ionic Lifecycle
-
-    /**
-     * Load the previously stored lists when this page is loaded.
-     */
-    ionViewDidLoad() {
-        this.storage.get('lists').then((lists: Array<ListM>) => {
-            console.info('lists?', lists);
-            if (lists !== null) {
-                this.lists = lists;
-
-                for (const list of lists) {
-                    if (!list.paid) {
-                        this.unfinished.unshift(list);
-                    }
-                }
-            }
-        });
-    }
+    constructor(
+        public navCtrl: NavController,
+        public lists: Lists,
+        private storage: Storage,
+        private formBuilder: FormBuilder,
+        private loadingCtrl: LoadingController
+    ) {}
 
     // Angular Lifecycle
 
@@ -48,30 +34,55 @@ export class AdminListsPage {
      */
     ngOnInit() {
         this.createForm = this.formBuilder.group({
-            listName: new FormControl('', Validators.compose([Validators.required]))
+            listName: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4)]))
         });
+    }
+
+    // Ionic Lifecycle
+
+    /**
+     * Load the previously stored lists when this page is loaded.
+     */
+    ionViewDidLoad() {
+        this.loader = this.loadingCtrl.create({
+            content: 'Loading...'
+        });
+        this.loader.present();
+
+        this.storage
+            .forEach((list: ListM) => {
+                if (list.hasOwnProperty('products') && list.paid) {
+                    this.lists.paid.unshift(list);
+                } else if (list.hasOwnProperty('products') && !list.paid) {
+                    this.lists.unpaid.unshift(list);
+                }
+            })
+            .then(() => {
+                console.info('paid:/', this.lists.paid);
+                console.info('unpaid:/', this.lists.unpaid);
+                this.loader.dismiss();
+            });
     }
 
     // User Interaction
 
     /**
-     * Create a new list item and append it to the current lists.
+     * Get the name for the new Create a new `ListM`, store it in the `storage` and take the user to the `ListDetailPage` page.
      */
     didPressCreate(): void {
         let name: string = this.createForm.controls['listName'].value;
-        let newList: ListM = new ListM(this.lists.length, name);
 
-        this.lists.unshift(newList);
-        this.storage.set('lists', this.lists).then(() => {
-            this.navCtrl.push('ListDetailPage', { list: newList });
+        this.lists.createList(name).then((list: ListM) => {
+            this.createForm.controls['listName'].reset();
+            this.navCtrl.push('ListDetailPage', { list: list });
         });
     }
 
     /**
-     * Send the selected list to be modified.
+     * Send the selected `ListM` to be modified.
      * @param list.
      */
     didPressList(list: ListM): void {
-        this.navCtrl.push('ListDetailPage', { list: list, allLists: this.lists });
+        this.navCtrl.push('ListDetailPage', { list: list });
     }
 }
